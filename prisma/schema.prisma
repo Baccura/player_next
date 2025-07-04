@@ -1,0 +1,95 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  files     File[]
+  reminders Reminder[]
+
+  @@map("users")
+}
+
+model Category {
+  id          String @id @default(cuid())
+  name        String @unique // films, series, autres
+  description String?
+
+  // Relations
+  files     File[]
+  reminders Reminder[]
+
+  @@map("categories")
+}
+
+model File {
+  id               String    @id @default(cuid())
+  title            String
+  status           FileStatus // downloading, moving, finished
+  size             BigInt?   // Taille en bytes
+  progress         Float     @default(0) // Pourcentage de téléchargement
+  downloadPath     String?   // Chemin de téléchargement
+  finalPath        String?   // Chemin final dans Plex
+  
+  // Métadonnées optionnelles (nulles pour "autres")
+  imageUrl         String?
+  season           Int?
+  downloadDate     DateTime?
+  releaseDate      DateTime?
+  
+  // Dates de suivi
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  
+  // Transmission specifique
+  transmissionId   Int?      @unique // ID du torrent dans Transmission
+  magnetLink       String?   // Lien magnet
+  
+  // Relations
+  userId           String
+  user             User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  categoryId       String
+  category         Category  @relation(fields: [categoryId], references: [id])
+
+  @@map("files")
+}
+
+model Reminder {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  completed   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  categoryId  String?
+  category    Category? @relation(fields: [categoryId], references: [id])
+
+  @@map("reminders")
+}
+
+enum FileStatus {
+  DOWNLOADING
+  MOVING
+  FINISHED
+  PAUSED
+  ERROR
+}
