@@ -11,7 +11,7 @@ export class TransmissionAPI {
     this.baseUrl = `http://${host}:${port}/transmission/rpc`
   }
 
-  private async request(method: string, arguments_: any = {}) {
+  private async request(method: string, arguments_: any = {}): Promise<any> {
     try {
       const response = await axios.post(
         this.baseUrl,
