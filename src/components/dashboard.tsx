@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useSession, signOut } from 'next-auth/react'
 import { FileWithRelations } from '@/types'
 import FileCard from './file-card'
@@ -14,11 +14,7 @@ export default function Dashboard() {
   const [category, setCategory] = useState<string>('all')
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
 
-  useEffect(() => {
-    fetchFiles()
-  }, [filter, category])
-
-  const fetchFiles = async () => {
+  const fetchFiles = useCallback(async () => {
     try {
       const params = new URLSearchParams()
       if (filter !== 'all') params.append('status', filter)
@@ -32,7 +28,11 @@ export default function Dashboard() {
     } catch (error) {
       console.error('Erreur récupération fichiers:', error)
     }
-  }
+  }, [filter, category])
+
+  useEffect(() => {
+    fetchFiles()
+  }, [fetchFiles])
 
   const handleFileAdded = () => {
     setIsAddModalOpen(false)

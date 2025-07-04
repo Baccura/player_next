@@ -67,7 +67,7 @@ export default function AddFileModal({ onClose, onFileAdded }: AddFileModalProps
         onFileAdded()
       } else {
         const errorData = await response.json()
-        setError(errorData.error || 'Erreur lors de l\'ajout du fichier')
+        setError(errorData.error || 'Erreur lors de l&apos;ajout du fichier')
       }
     } catch (error) {
       setError('Erreur de communication avec le serveur')
@@ -76,7 +76,7 @@ export default function AddFileModal({ onClose, onFileAdded }: AddFileModalProps
     }
   }
 
-  const handleInputChange = (field: keyof CreateFileData, value: string | number) => {
+  const handleInputChange = (field: keyof CreateFileData, value: string | number | undefined) => {
     setFormData(prev => ({
       ...prev,
       [field]: value
@@ -161,7 +161,7 @@ export default function AddFileModal({ onClose, onFileAdded }: AddFileModalProps
                 {/* URL Image */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    URL de l'image (optionnel)
+                    URL de l&apos;image (optionnel)
                   </label>
                   <input
                     type="url"
@@ -171,7 +171,7 @@ export default function AddFileModal({ onClose, onFileAdded }: AddFileModalProps
                     placeholder="https://example.com/image.jpg"
                   />
                   <p className="text-xs text-gray-500 mt-1">
-                    Si laissé vide, l'image sera recherchée automatiquement
+                    Si laissé vide, l&apos;image sera recherchée automatiquement
                   </p>
                 </div>
 
