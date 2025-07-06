@@ -1,4 +1,5 @@
-import axios from 'axios'
+//import axios from 'axios'
+import api from '@/utils/axios'
 import { TMDBSearchResult } from '@/types'
 
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3'
@@ -15,7 +16,7 @@ export class TMDBAPI {
     if (!this.apiKey) return []
 
     try {
-      const response = await axios.get(`${TMDB_BASE_URL}/search/movie`, {
+      const response = await api.get(`${TMDB_BASE_URL}/search/movie`, {
         params: {
           api_key: this.apiKey,
           query,
@@ -33,7 +34,7 @@ export class TMDBAPI {
     if (!this.apiKey) return []
 
     try {
-      const response = await axios.get(`${TMDB_BASE_URL}/search/tv`, {
+      const response = await api.get(`${TMDB_BASE_URL}/search/tv`, {
         params: {
           api_key: this.apiKey,
           query,

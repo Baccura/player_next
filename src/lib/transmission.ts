@@ -1,4 +1,5 @@
-import axios from 'axios'
+//import axios from 'axios'
+import api from '@/utils/axios'
 import { TransmissionResponse, TransmissionTorrent } from '@/types'
 
 export class TransmissionAPI {
@@ -13,7 +14,7 @@ export class TransmissionAPI {
 
   private async request(method: string, arguments_: any = {}): Promise<any> {
     try {
-      const response = await axios.post(
+      const response = await api.post(
         this.baseUrl,
         {
           method,
